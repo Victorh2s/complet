@@ -1,0 +1,44 @@
+services:
+    postgres:
+      container_name: complet-postgres
+      image: postgres:15-alpine 
+      environment:
+          POSTGRES_USER: ${DB_USER}
+          POSTGRES_PASSWORD: ${DB_PASSWORD}
+          POSTGRES_DB: ${DB_NAME}
+      ports:
+        - ${DB_PORT}:5432
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+        interval: 5s
+        timeout: 5s
+        retries: 30 
+
+    
+    redis:
+      container_name: complet-redis
+      image: redis:latest
+      ports:
+        - 6379:6379
+      restart: unless-stopped
+
+
+    # api:
+    #   container_name: complet-api
+    #   build: .
+    #   ports: 
+    #     - 80:80
+    #   command: sh -c "while ! (timeout 3 bash -c 'cat < /dev/null > /dev/tcp/mysql/3306' 2>/dev/null); do sleep 2; echo 'Aguardando MySQL - Isso deve demorar um tempinho...'; done && npx prisma migrate deploy && npm run test:ver && npm run start"
+    #   environment:
+    #     DATABASE_URL: ${DATABASE_URL}
+    #   restart: unless-stopped
+
+ 
+volumes:
+  postgres_data:
+
+networks:
+  complet-network:
+    driver: bridge
