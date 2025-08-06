@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
 import * as request from "supertest";
-import { AppModule } from "../src/app.module";
-import { PrismaService } from "../src/database/prisma.service";
-import { CreateUserDto } from "../src/dtos/validation.dto";
+import { AppModule } from "./app.module";
+import { PrismaService } from "./database/prisma.service";
+import { CreateUserDto } from "./dtos/validation.dto";
 
 if (process.env.NODE_ENV === "test") {
   process.env.DATABASE_URL = process.env.DATABASE_URL_TESTE;

@@ -1,28 +1,51 @@
 services:
-    postgres:
-      container_name: complet-postgres
-      image: postgres:15-alpine 
-      environment:
-          POSTGRES_USER: ${DB_USER}
-          POSTGRES_PASSWORD: ${DB_PASSWORD}
-          POSTGRES_DB: ${DB_NAME}
-      ports:
-        - ${DB_PORT}:5432
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
-        interval: 5s
-        timeout: 5s
-        retries: 30 
+      postgres:
+        container_name: complet-postgres
+        image: postgres:15-alpine 
+        environment:
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+        ports:
+          - ${DB_PORT}:5432
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+          interval: 5s
+          timeout: 5s
+          retries: 30 
+        networks:
+        - complet-network
 
-    
-    redis:
-      container_name: complet-redis
-      image: redis:latest
-      ports:
-        - 6379:6379
-      restart: unless-stopped
+      postgres_teste:
+        container_name: complet-postgres-teste
+        image: postgres:15-alpine 
+        environment:
+          POSTGRES_USER: ${DB_USER_TESTE}
+          POSTGRES_PASSWORD: ${DB_PASSWORD_TESTE}
+          POSTGRES_DB: ${DB_NAME_TESTE}
+        ports:
+          - ${DB_PORT_TESTE}:5432
+        volumes:
+          - postgres_data_teste:/var/lib/postgresql/data
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U ${DB_USER_TESTE}"]
+          interval: 5s
+          timeout: 5s
+          retries: 30
+        networks:
+          - complet-network
+
+      redis:
+        container_name: complet-redis
+        image: redis:latest
+        ports:
+          - 6379:6379
+        restart: unless-stopped
+        networks:
+          - complet-network
+
 
 
     # api:
@@ -38,6 +61,7 @@ services:
  
 volumes:
   postgres_data:
+  postgres_data_teste:
 
 networks:
   complet-network:

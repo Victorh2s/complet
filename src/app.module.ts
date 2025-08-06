@@ -5,9 +5,13 @@ import { AppService } from "./app.service";
 import { PrismaService } from "./database/prisma.service";
 import { CacheModule } from "@nestjs/cache-manager";
 import * as redisStore from "cache-manager-ioredis";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: [".env"],
+    }),
     CacheModule.registerAsync({
       useFactory: async () => ({
         store: redisStore,

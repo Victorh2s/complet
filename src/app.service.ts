@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { PrismaService } from "./database/prisma.service";
-import { User } from "prisma/generated";
+import { User } from "../prisma/generated";
 import { CreateUserDto } from "./dtos/validation.dto";
 import { CACHE_MANAGER, Cache } from "@nestjs/cache-manager";
 
