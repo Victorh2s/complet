@@ -14,6 +14,11 @@ import { CreateUserDto, UpdateUserDto } from "./dtos/validation.dto";
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get("/debug-sentry")
+  getError() {
+    throw new Error("My first Sentry error!");
+  }
+
   @Get("list")
   async getUsers() {
     return this.appService.getUsers();

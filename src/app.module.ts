@@ -6,6 +6,8 @@ import { PrismaService } from "./database/prisma.service";
 import { CacheModule } from "@nestjs/cache-manager";
 import * as redisStore from "cache-manager-ioredis";
 import { ConfigModule } from "@nestjs/config";
+import { SentryGlobalFilter, SentryModule } from "@sentry/nestjs/setup";
+import { APP_FILTER } from "@nestjs/core";
 
 @Module({
   imports: [
@@ -20,8 +22,16 @@ import { ConfigModule } from "@nestjs/config";
         ttl: 60,
       }),
     }),
+    SentryModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [
+    AppService,
+    PrismaService,
+    {
+      provide: APP_FILTER,
+      useClass: SentryGlobalFilter,
+    },
+  ],
 })
 export class AppModule {}
