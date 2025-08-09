@@ -8,6 +8,7 @@ import * as redisStore from "cache-manager-ioredis";
 import { ConfigModule } from "@nestjs/config";
 import { SentryGlobalFilter, SentryModule } from "@sentry/nestjs/setup";
 import { APP_FILTER } from "@nestjs/core";
+import { MailerModule } from "@nestjs-modules/mailer";
 
 @Module({
   imports: [
@@ -23,6 +24,21 @@ import { APP_FILTER } from "@nestjs/core";
       }),
     }),
     SentryModule.forRoot(),
+    MailerModule.forRoot({
+      transport: {
+        service: process.env.EMAIL_SERVICE,
+        host: process.env.EMAIL_HOST,
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+      defaults: {
+        from: `"Complet - Prowtech Solutions" <${process.env.EMAIL}>`,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
